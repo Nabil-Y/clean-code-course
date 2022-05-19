@@ -1,37 +1,37 @@
-# Refactor this code
+# (c) Maximilian Schwarzmüller / Academind GmbH
 
-class Point:
-    def __init__(self, X, Y):
-        self.X = X
-        self.Y = Y
+# *********
+# Imports
+# *********
+from os import path, makedirs
+from pathlib import Path
 
-
-class Rectangle:
-    def __init__(self, origin, width, height):
-        self.origin = origin
-        self.width = width
-        self.height = height
-
-    def get_area(self):
-        return self.width * self.height
-
-    def print_coordinates(self):
-        top_right = self.origin.X + self.width
-        bottom_left = self.origin.Y + self.height
-        print('Starting Point (X)): ' + str(self.origin.X))
-        print('Starting Point (Y)): ' + str(self.origin.Y))
-        print('End Point X-Axis (Top Right): ' + str(top_right))
-        print('End Point Y-Axis (Bottom Left): ' + str(bottom_left))
+# *********
+# Main
+# *********
+# A class which allows us to create DiskStorage instances
 
 
-def build_rectangle():
-    rectangle_origin = Point(50, 100)
-    rectangle = Rectangle(rectangle_origin, 90, 10)
+class DiskStorage:
+    def __init__(self, directory_name):
+        self.storage_directory = directory_name
 
-    return rectangle
+    def get_directory_path(self):
+        return Path(self.storage_directory)
+
+    # This must be called before a file is inserted
+    def create_directory(self):
+        if (not path.exists(self.get_directory_path())):
+            makedirs(self.storage_directory)
+
+    # Warning: Directory must exist in advance
+    def insert_file(self, file_name, content):
+        file = open(self.get_directory_path() / file_name, 'w')
+        file.write(content)
+        file.close()
+        # Todo: Add proper error handling
 
 
-rectangle = build_rectangle()
+log_storage = DiskStorage('logs')
 
-print(rectangle.get_area())
-rectangle.print_coordinates()
+log_storage.insert_file('test.txt', 'Test')

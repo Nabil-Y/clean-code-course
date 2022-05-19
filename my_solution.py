@@ -1,35 +1,37 @@
-class Point:
-    def __init__(self, starting_X, starting_Y):
-        self.starting_X = starting_X
-        self.starting_Y = starting_Y
+# (c) Maximilian Schwarzmüller / Academind GmbH
+
+# *********
+# Imports
+# *********
+from os import path, makedirs
+from pathlib import Path
+
+# *********
+# Main
+# *********
+# A class which allows us to create DiskStorage instances
 
 
-class Rectangle:
-    def __init__(self, starting_point, width, height):
-        self.starting_point = starting_point
-        self.width = width
-        self.height = height
+class DiskStorage:
+    def __init__(self, directory_name):
+        self.storage_directory = directory_name
 
-    def area(self):
-        return self.width * self.height
+    def get_directory_path(self):
+        return Path(self.storage_directory)
 
-    def end_points(self):
-        bottom_right = self.starting_point.starting_X + self.width
-        top_left = self.starting_point.starting_Y + self.height
-        print('Starting Point (X)): ' + str(self.starting_point.starting_X))
-        print('Starting Point (Y)): ' + str(self.starting_point.starting_Y))
-        print('End Point X-Axis (Bottom Right): ' + str(bottom_right))
-        print('End Point Y-Axis (Top Left): ' + str(top_left))
+    # This must be called before a file is inserted
+    def create_directory(self):
+        if (not path.exists(self.get_directory_path())):
+            makedirs(self.storage_directory)
 
-
-def build_new_rectangle():
-    main_point = Point(50, 100)
-    new_rectangle = Rectangle(main_point, 90, 10)
-
-    return new_rectangle
+    # Warning: Directory must exist in advance
+    def insert_file(self, file_name, content):
+        file = open(self.get_directory_path() / file_name, 'w')
+        file.write(content)
+        file.close()
+        # Todo: Add proper error handling
 
 
-my_rectangle = build_new_rectangle()
+log_storage = DiskStorage('logs')
 
-print(my_rectangle.area())
-my_rectangle.end_points()
+log_storage.insert_file('test.txt', 'Test')
