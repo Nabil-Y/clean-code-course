@@ -1,16 +1,7 @@
 # (c) Maximilian Schwarzmüller / Academind GmbH
 
-# *********
-# Imports
-# *********
 from os import path, makedirs
 from pathlib import Path
-
-# *********
-# Main
-# *********
-# A class which allows us to create DiskStorage instances
-
 
 class DiskStorage:
     def __init__(self, directory_name):
@@ -31,7 +22,5 @@ class DiskStorage:
         file.close()
         # Todo: Add proper error handling
 
-
 log_storage = DiskStorage('logs')
-
 log_storage.insert_file('test.txt', 'Test')
